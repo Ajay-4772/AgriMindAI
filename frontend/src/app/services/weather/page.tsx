@@ -28,7 +28,7 @@ export default function WeatherForecast() {
     if (!location.lat || !location.lon) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:8000/api/weather/forecast?lat=${location.lat}&lon=${location.lon}`);
+      const res = await axios.get(`http://localhost:8080/api/weather/forecast?lat=${location.lat}&lon=${location.lon}`);
       setResult(res.data);
     } catch (error) {
       console.error(error);

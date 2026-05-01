@@ -24,7 +24,7 @@ export default function FertilizerGuide() {
         phosphorus: parseFloat(formData.phosphorus),
         potassium: parseFloat(formData.potassium),
       };
-      const res = await axios.post('http://localhost:8000/api/fertilizer/recommend', formattedData);
+      const res = await axios.post('http://localhost:8080/api/fertilizer/recommend', formattedData);
       setResult(res.data);
     } catch (error) {
       console.error(error);

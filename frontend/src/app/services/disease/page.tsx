@@ -29,7 +29,7 @@ export default function DiseaseDetection() {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://localhost:8000/api/disease/detect', formData, {
+      const res = await axios.post('http://localhost:8080/api/disease/detect', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setResult(res.data);

@@ -1,6 +1,5 @@
 "use client"
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { Sprout, TrendingUp, Bug, Beaker, CloudRain, ChevronRight } from 'lucide-react';
 
 export default function Home() {
@@ -16,12 +15,7 @@ export default function Home() {
     <div className="flex flex-col items-center">
       {/* Hero Section */}
       <section className="w-full bg-gradient-to-br from-agri to-agri-dark text-white py-24 px-4 text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
-        >
+        <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
             Smart Agriculture with <span className="text-agri-light">AI Predictions</span>
           </h1>
@@ -33,7 +27,7 @@ export default function Home() {
               Start Predicting <ChevronRight className="ml-2 h-5 w-5" />
             </Link>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Stats Section */}
@@ -68,10 +62,9 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feat, idx) => (
-              <motion.div 
+              <div 
                 key={idx}
-                whileHover={{ y: -10 }}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col"
+                className="bg-white rounded-2xl shadow-xl overflow-hidden hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col"
               >
                 <div className="p-8 flex-grow">
                   <div className="w-16 h-16 bg-agri-light rounded-full flex items-center justify-center mx-auto mb-6">
@@ -85,7 +78,7 @@ export default function Home() {
                     Try Now <ChevronRight className="ml-1 h-4 w-4" />
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
