@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+scikit-learn
+torch
+torchvision
+pandas
+python-multipart
+httpx
+pydantic
+sqlalchemy
