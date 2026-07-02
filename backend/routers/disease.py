@@ -1,11 +1,16 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-import torch
-import pandas as pd
-import torchvision.transforms as transforms
 from PIL import Image
 import io
 import os
 import random
+
+# Optional imports for PyTorch (supports memory-constrained environments like Render Free Tier)
+try:
+    import torch
+    import torchvision.transforms as transforms
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
 
 router = APIRouter()
 
@@ -13,20 +18,22 @@ MODEL_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models', 
 
 # Load the model
 model = None
-try:
-    if os.path.exists(MODEL_PATH):
-        model = torch.load(MODEL_PATH)
-        model.eval()
-except Exception as e:
-    print(f"Warning: Could not load disease model. {e}")
+if HAS_TORCH:
+    try:
+        if os.path.exists(MODEL_PATH):
+            model = torch.load(MODEL_PATH)
+            model.eval()
+    except Exception as e:
+        print(f"Warning: Could not load disease model. {e}")
 
 # Standard ImageNet transforms
-preprocess = transforms.Compose([
-    transforms.Resize(256),
-    transforms.CenterCrop(224),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
+if HAS_TORCH:
+    preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
 
 # Mock disease classes for demonstration
 MOCK_DISEASES = [
@@ -46,7 +53,7 @@ async def detect_disease(file: UploadFile = File(...)):
     contents = await file.read()
     image = Image.open(io.BytesIO(contents)).convert("RGB")
     
-    if model:
+    if HAS_TORCH and model:
         # Run inference
         input_tensor = preprocess(image)
         input_batch = input_tensor.unsqueeze(0)
@@ -57,7 +64,7 @@ async def detect_disease(file: UploadFile = File(...)):
         probabilities = torch.nn.functional.softmax(output[0], dim=0)
         confidence = torch.max(probabilities).item() * 100
     else:
-        # Fallback to random if model not loaded
+        # Fallback to random if model not loaded or torch is missing
         confidence = random.uniform(70.0, 99.9)
     
     # Mock disease result based on file size or random just for presentation
