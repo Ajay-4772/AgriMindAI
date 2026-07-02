@@ -1,13 +1,19 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import crop, yield_pred, disease, fertilizer, weather
 
 app = FastAPI(title="AgriMindAI API")
 
-# Setup CORS for the frontend (Next.js runs on 3000)
+# Setup CORS
+allowed_origins = ["http://localhost:3000"]
+env_origins = os.getenv("ALLOWED_ORIGINS")
+if env_origins:
+    allowed_origins = [origin.strip() for origin in env_origins.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

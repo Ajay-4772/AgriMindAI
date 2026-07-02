@@ -25,7 +25,8 @@ export default function YieldPrediction() {
         temperature: parseFloat(formData.temperature),
         fertilizer_used: parseFloat(formData.fertilizer_used),
       };
-      const res = await axios.post('http://localhost:8080/api/yield/predict', formattedData);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      const res = await axios.post(`${API_URL}/api/yield/predict`, formattedData);
       setResult(res.data);
     } catch (error) {
       console.error(error);

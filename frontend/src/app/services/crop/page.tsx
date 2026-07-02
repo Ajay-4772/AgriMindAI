@@ -40,7 +40,8 @@ export default function CropRecommendation() {
         market_preference: formData.market_preference || 'Mixed'
       };
       
-      const res = await axios.post('http://localhost:8080/api/crop/predict', formattedData);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      const res = await axios.post(`${API_URL}/api/crop/predict`, formattedData);
       setResult(res.data);
     } catch (error) {
       console.error(error);
